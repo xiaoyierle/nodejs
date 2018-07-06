@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');//中间件：每次请求过来�
 const session = require('express-session');//req.session
 const bodyParser = require('body-parser');//req.body 方的用户post的数据
 const multer = require('multer');
+var request = require('request');
 const server = express();//常量
 const fs = require('fs');
 const os = require('os');
@@ -630,6 +631,13 @@ server.get('/api/get_address_info_by_id',(req,res)=>{
             res.json(err.message);
         }
     })
+})
+server.use('/yecaishui/*', function(req, res) {
+    var url = 'http://47.96.239.36' + req.originalUrl;
+    req.pipe(request(url)).pipe(res);
+});
+server.get('/account/*',(req,res)=>{
+    res.sendFile(path.resolve('./public/account/index.html'));
 })
 server.get('/admin/*',(req,res)=>{
     res.sendFile(path.resolve('./public/admin/index.html'));
